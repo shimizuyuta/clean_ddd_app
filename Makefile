@@ -1,14 +1,3 @@
-# Laravel Clean DDD App - Essential Commands
-# Docker Compose with Laravel Sail
-
-# Default target
-.PHONY: help
-help: ## Show this help message
-	@echo "Laravel Clean DDD App - Essential Commands"
-	@echo "========================================="
-	@echo ""
-	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
-
 # Docker Container Management
 .PHONY: up
 up: ## Start the development environment
@@ -33,6 +22,10 @@ build: ## Build the containers
 .PHONY: status
 status: ## Show container status
 	docker-compose ps
+
+.PHONY: shell
+shell: ## Enter the container shell
+	docker-compose exec laravel.test bash
 
 # Database Operations
 .PHONY: migrate
