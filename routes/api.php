@@ -1,5 +1,6 @@
 <?php
 
+use App\Application\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,6 @@ Route::get('/health', function () {
         'timestamp' => now()
     ]);
 });
+
+// User API routes
+Route::get('/users/{id}', [UserController::class, 'show']);
