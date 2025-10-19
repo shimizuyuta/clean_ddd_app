@@ -2,6 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// API routes will be defined in routes/api.php
+// This file is kept for any web-specific routes if needed in the future
