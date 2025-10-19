@@ -1,62 +1,182 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Clean DDD API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Clean ArchitectureとDomain-Driven Design（DDD）に基づいたLaravel APIサーバーです。
 
-## About Laravel
+## 🏗️ アーキテクチャ
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+```
+app/
+├── Domain/                    # ビジネスルール（フレームワーク非依存）
+│   ├── Models/                # Entity / ValueObject
+│   └── Repositories/          # Repository Interface
+│
+├── Application/              # ユースケース（アプリケーションフロー）
+│   ├── Controllers/          # APIコントローラ（外部I/O）
+│   ├── Requests/             # 入力DTO（JSON）
+│   ├── Responses/            # 出力DTO（JSON）
+│   └── UseCases/             # UseCase, Structure, Requirement
+│
+├── Infrastructure/           # 技術的詳細（永続化・外部APIなど）
+│   ├── Eloquent/            # ORMモデル
+│   └── Repositories/        # Repository実装（Domain契約を実装）
+│
+└── Providers/               # DIバインド、ServiceProviderなど
+```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🚀 クイックスタート
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. 開発環境の起動
+```bash
+# 開発環境を起動
+make up
 
-## Learning Laravel
+# データベースを初期化
+make migrate
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# APIの動作確認
+make api-test
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 2. 開発作業
+```bash
+# コンテナ内のシェルに入る
+make shell
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# コントローラーを作成
+make controller NAME="TodoListController"
 
-## Laravel Sponsors
+# コード品質チェック
+make check
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📋 Makefileコマンド一覧
 
-### Premium Partners
+### 🐳 Dockerコンテナ管理
+```bash
+make up          # 開発環境を起動
+make down        # 開発環境を停止
+make restart     # 開発環境を再起動
+make logs        # コンテナのログを表示
+make build       # コンテナをビルド
+make status      # コンテナの状態を表示
+make shell       # コンテナ内のシェルに入る
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 🗄️ データベース操作
+```bash
+make migrate        # マイグレーションを実行
+make migrate-fresh   # フレッシュマイグレーション（データリセット）
+make rollback       # 最後のマイグレーションをロールバック
+make seed          # シーダーを実行
+```
 
-## Contributing
+### 🧪 APIテスト
+```bash
+make api-test       # APIエンドポイントをテスト
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 🔧 コード品質
+```bash
+make install-phpstan    # PHPStanとLarastanをインストール
+make pint              # Laravel Pint（コードスタイル修正）
+make phpstan           # PHPStan（静的解析）
+make check             # 両方を実行（Pint + PHPStan）
+```
 
-## Code of Conduct
+### 📝 コントローラー作成
+```bash
+make controller NAME="TodoListController"    # コントローラーを作成
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🛠️ 開発ワークフロー
 
-## Security Vulnerabilities
+### 日常の開発作業
+```bash
+# 1. 開発環境を起動
+make up
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# 2. 新しい機能を開発
+make shell
+# コンテナ内で作業...
 
-## License
+# 3. データベースを更新
+make migrate
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# clean_ddd_app
+# 4. コード品質をチェック
+make check
+
+# 5. APIをテスト
+make api-test
+
+# 6. 開発終了時
+make down
+```
+
+### 新機能開発の流れ
+```bash
+# 1. コントローラーを作成
+make controller NAME="ProductController"
+
+# 2. 作成されたファイルをClean Architectureの構造に移動
+mv app/Http/Controllers/ProductController.php app/Application/Controllers/
+
+# 3. 必要に応じて以下を作成
+# - Domain/Models/Product.php
+# - Domain/Repositories/ProductRepositoryInterface.php
+# - Application/UseCases/CreateProductUseCase.php
+# - Infrastructure/Repositories/ProductRepository.php
+```
+
+## 🔍 トラブルシューティング
+
+### よくある問題と解決方法
+
+#### 1. アプリケーション名前空間検出エラー
+```bash
+# 環境変数を確認・設定
+cat .env | grep APP_
+
+# 設定をクリア
+make shell
+php artisan config:clear
+php artisan cache:clear
+```
+
+#### 2. データベース接続エラー
+```bash
+# データベース設定を確認
+grep -E "DB_" .env
+
+# データベースを初期化
+make migrate
+```
+
+#### 3. コンテナが起動しない
+```bash
+# コンテナの状態を確認
+make status
+
+# ログを確認
+make logs
+
+# コンテナを再ビルド
+make build
+```
+
+## 📚 参考資料
+
+- [Laravel Documentation](https://laravel.com/docs)
+- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Domain-Driven Design](https://martinfowler.com/bliki/DomainDrivenDesign.html)
+
+## 🤝 コントリビューション
+
+1. このリポジトリをフォーク
+2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
+3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
+4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
+5. プルリクエストを作成
+
+## 📄 ライセンス
+
+このプロジェクトはMITライセンスの下で公開されています。

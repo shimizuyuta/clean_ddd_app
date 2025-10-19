@@ -27,6 +27,10 @@ status: ## Show container status
 shell: ## Enter the container shell
 	docker-compose exec laravel.test bash
 
+.PHONY: controller
+controller: ## Create a controller (usage: make controller NAME="TodoListController")
+	docker-compose exec laravel.test php artisan make:controller $(NAME)
+
 # Database Operations
 .PHONY: migrate
 migrate: ## Run database migrations
